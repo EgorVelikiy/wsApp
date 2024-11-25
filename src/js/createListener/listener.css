@@ -1,0 +1,20 @@
+.listener-container {
+    display: inline-flex;
+    align-items: center;
+    border-top: 1px solid #dcdcdc;
+    padding: 10px;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.listener-name {
+    font-size: 16px;
+    color: #3d91aa;
+    margin-right: 10px;
+    font-weight: bold;
+    word-break: break-all;
+}

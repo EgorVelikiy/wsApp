@@ -1,0 +1,34 @@
+.message-container {
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    flex: 0 0 auto;
+    margin-bottom: 15px;
+}
+
+.message-widget {
+    display: inline-flex;
+    align-items: baseline;
+}
+
+.user-name {
+    font-size: 16px;
+    color: #3d91aa;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.date-sended {
+    font-size: 16px;
+    color: #a79f9f;
+}
+
+.message {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #333;
+    margin-right: auto;
+    word-break: break-all;
+}
