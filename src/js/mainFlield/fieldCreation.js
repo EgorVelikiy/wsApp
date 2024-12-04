@@ -2,6 +2,7 @@ import './field.css';
 
 export default function fieldCreation() {
   const markup = `
+        <button class="start hidden" type="button">Присоединиться к чату</button>
         <div class="container-main hidden" name="">
             <div class="chat">
             </div>
@@ -20,7 +21,7 @@ export default function fieldCreation() {
                 </form>
             </div>
         </div>
-        <button class="exit">Покинуть чат</button>
+        <button class="exit hidden" type="button">Покинуть чат</button>
     `;
   document.body.insertAdjacentHTML('afterbegin', markup);
 }

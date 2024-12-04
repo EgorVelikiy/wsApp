@@ -13,7 +13,7 @@
 }
 
 .form-widget {
-    position: absolute;
+    position: fixed;
 }
 
 .chat {
@@ -35,7 +35,8 @@
     display: flex;
     min-height: 80px;
     max-height: 40%;
-    width: 250px;
+    min-width: 50%;
+    max-width: 250px;
     left: -50%;
     margin-left: -10px;
     padding: 10px;
@@ -52,12 +53,10 @@
     border: 1px solid #000000;
     border-radius: 8px;
     background-color: #fff;
-    z-index: 999;
     text-align: center;
 }
 
 .title {
-    margin-bottom: 10px;
     font-size: 14px;
     color: #888;
 }
@@ -65,7 +64,6 @@
 .login-form {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
 
 .name {
@@ -75,24 +73,30 @@
     border-radius: 4px;
 }
 
-.create {
-    display: inline-block;
+.create, .start {
     margin: auto;
     margin-top: 15px;
     padding: 8px 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 7px;
     background-color: #f8f8f8;
     cursor: pointer;
     font-size: 14px;
 }
 
+.start {
+    position: fixed;
+}
+
+.start:hover {
+    background-color: #ffffff;
+}
+
 .exit {
-    display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 8px 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 7px;
     background-color: #f8f8f8;
     cursor: pointer;
     font-size: 14px;

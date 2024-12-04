@@ -3,11 +3,10 @@ import createUser from './createUser/createUser';
 
 fieldCreation();
 
-const chat = document.querySelector('.chat');
-const chatContainer = document.querySelector('.container-main');
-const usersContainer = document.querySelector('.listeners');
-
 const formContainer = document.querySelector('.form-widget');
+const chatContainer = document.querySelector('.container-main');
 const exitBtn = document.querySelector('.exit');
-const userCreator = new createUser(formContainer, chatContainer, exitBtn, usersContainer, chat);
+const startChatBtn = document.querySelector('.start');
+
+const userCreator = new createUser(formContainer, chatContainer, startChatBtn, exitBtn);
 userCreator.init();

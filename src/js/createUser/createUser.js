@@ -1,20 +1,19 @@
-import fieldCreation from '../mainFlield/fieldCreation';
 import createListener from '../createListener/createListener';
 import createMessages from '../createMessage/createMessage';
 import writeYourMessage from '../writeYourMessage/writeYourMessage';
 
 export default class createUser {
-  constructor(formContainer, chatContainer, exitBtn, usersContainer, chat) {
+  constructor(formContainer, chatContainer, startChatBtn, exitBtn) {
     this.formContainer = formContainer;
     this.chatContainer = chatContainer;
     this.exitBtn = exitBtn;
-    this.usersContainer = usersContainer;
-    this.chat = chat;
-    this.ws = new WebSocket('ws://localhost:7070');
-    console.log(this.ws);
+    this.listeners = this.chatContainer.querySelector('.listeners');
+    this.chat = this.chatContainer.querySelector('.chat');
+    this.startChatBtn = startChatBtn;
     this.chatForm = this.chatContainer.querySelector('.chat-form');
     this.loginForm = this.formContainer.querySelector('.login-form');
-    this.apiUrl = 'http://localhost:7070';
+    this.userName;
+    this.ws;
   }
 
   init() {
@@ -22,6 +21,10 @@ export default class createUser {
       e.preventDefault();
       const name = this.loginForm.querySelector('.name').value;
       this.addUser(name);
+    });
+
+    this.startChatBtn.addEventListener('click', () => {
+      this.startChating();
     });
 
     this.chatForm.addEventListener('submit', (e) => {
@@ -32,58 +35,47 @@ export default class createUser {
       this.sendMessage(message, userName);
     });
 
-    this.exitBtn.addEventListener('click', () => {
+    this.exitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       this.exitChat();
     });
 
-    this.ws.addEventListener('error', (e) => {
-      console.log(e);
-      console.log('ws error');
+    window.addEventListener('beforeunload', () => {
+      this.exitChat();
     });
+  }
+
+  addUser(userName) {
+    this.userName = userName;
+    this.loginForm.reset();
+    this.formContainer.classList.add('hidden');
+    this.chatContainer.setAttribute('name', userName);
+    this.startChatBtn.classList.remove('hidden');
+  }
+
+  startChating() {
+    this.ws = new WebSocket('ws://wsserver-168s.onrender.com');
+    this.chatContainer.classList.remove('hidden');
+    this.exitBtn.classList.remove('hidden');
+    this.ws.onopen = () => this.ws.send(JSON.stringify({ userReg: this.userName }));
 
     this.ws.addEventListener('message', (e) => {
       const data = JSON.parse(e.data);
       if (data.messages) {
         Array.from(data.messages).forEach((message) => createMessages(this.chat, message));
       } else if (data.users) {
-        this.usersContainer.replaceChildren();
-        Array.from(data.users).forEach((user) => createListener(this.usersContainer, user.name));
+        console.log('data.users');
+        this.listeners.replaceChildren();
+        Array.from(data.users).forEach((user) => createListener(this.listeners, user.name));
       } else if (data.newUser) {
-        createListener(this.usersContainer, data.newUser);
+        console.log('data.newUser');
+        createListener(this.listeners, data.newUser);
       } else if (data.name == this.chatContainer.getAttribute('name')) {
         writeYourMessage(this.chat, data);
       } else {
         createMessages(this.chat, data);
       }
     });
-  }
-
-  async addUser(userName) {
-    try {
-      const request = fetch(this.apiUrl + '/createUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userName: `${userName}` }),
-      });
-
-      const result = await request;
-
-      if (!result.ok) {
-        const json = await result.json();
-        alert(json.error);
-        return;
-      }
-
-      this.loginForm.reset();
-      this.formContainer.classList.add('hidden');
-      document.querySelector('.container-main').setAttribute('name', userName);
-      document.querySelector('.container-main').classList.remove('hidden');
-      this.ws.send(JSON.stringify({ userReg: userName }));
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   sendMessage(message, userName) {
@@ -94,13 +86,12 @@ export default class createUser {
 
   exitChat() {
     const wsName = this.chatContainer.getAttribute('name');
-    console.log(wsName);
     this.ws.send(JSON.stringify({ closeName: wsName }));
 
     this.ws.close();
-    document.body.replaceChildren();
-    fieldCreation();
-
-    this.ws = new WebSocket('ws://localhost:7070');
+    console.log('ws closing');
+    this.ws.onclose = () => {
+      window.location.reload();
+    };
   }
 }
