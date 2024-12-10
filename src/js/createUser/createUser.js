@@ -54,7 +54,7 @@ export default class createUser {
   }
 
   startChating() {
-    this.ws = new WebSocket('ws://wsserver-168s.onrender.com');
+    this.ws = new WebSocket('wss://wsserver-168s.onrender.com');
     this.chatContainer.classList.remove('hidden');
     this.exitBtn.classList.remove('hidden');
     this.ws.onopen = () => this.ws.send(JSON.stringify({ userReg: this.userName }));
